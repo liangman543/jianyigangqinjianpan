@@ -16,11 +16,12 @@
             --black-key: #000000;
             --black-key-active: #374151;
             --border-color: #475569;
+            --accent-color: #6366f1;
         }
 
         * {
             box-sizing: border-box;
-            user-select: none; /* 禁止选中文本，保证拖拽体验 */
+            user-select: none;
             -webkit-user-select: none;
             margin: 0;
             padding: 0;
@@ -32,54 +33,59 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             width: 100vw;
             height: 100vh;
-            overflow: hidden; /* 防止页面滚动 */
+            overflow: hidden;
             position: relative;
         }
 
         /* 顶部工具栏 */
         #toolbar {
             position: absolute;
-            top: 10px;
+            top: 15px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(30, 41, 59, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 10px 20px;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px;
             border-radius: 999px;
             display: flex;
             gap: 15px;
             align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-color);
-            z-index: 99999;
+            z-index: 10000;
         }
 
         h1 {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 600;
             margin-right: 10px;
+            color: #e2e8f0;
         }
 
-        button {
-            background: #4f46e5;
+        .tool-btn {
+            background: var(--accent-color);
             color: white;
             border: none;
             padding: 6px 16px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background 0.2s;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        button:hover {
-            background: #4338ca;
+        .tool-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
         }
 
-        button.secondary {
+        .tool-btn.secondary {
             background: #475569;
         }
 
-        button.secondary:hover {
+        .tool-btn.secondary:hover {
             background: #334155;
         }
 
@@ -89,18 +95,19 @@
             background: var(--window-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             width: fit-content;
-            min-width: 300px;
-            touch-action: none; /* 防止触摸滚动 */
+            /* 保证最小宽度 */
+            min-width: 200px; 
+            touch-action: none;
         }
 
         /* 窗口标题栏 */
         .window-header {
-            height: 40px;
+            height: 36px;
             background: var(--header-bg);
             display: flex;
             align-items: center;
@@ -108,6 +115,7 @@
             padding: 0 10px;
             cursor: move;
             transition: background 0.2s;
+            border-bottom: 1px solid #334155;
         }
 
         .window-header.dragging {
@@ -115,51 +123,67 @@
         }
 
         .window-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            color: #e2e8f0;
         }
 
         .window-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .control-label {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-right: 2px;
+        }
+
+        .icon-btn {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: #475569;
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1;
+        }
+        
+        .icon-btn:hover {
+            background: var(--accent-color);
         }
 
         .close-btn {
             background: transparent;
             color: #94a3b8;
-            padding: 4px;
+            padding: 2px;
             font-size: 16px;
             line-height: 1;
+            border: none;
+            cursor: pointer;
+            margin-left: 5px;
         }
 
         .close-btn:hover {
             color: #ef4444;
-            background: transparent;
-        }
-
-        /* 缩放滑块 */
-        .scale-control {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(0,0,0,0.2);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .scale-control span {
-            font-size: 10px;
-            color: #cbd5e1;
-        }
-
-        input[type="range"] {
-            width: 60px;
-            height: 4px;
-            cursor: pointer;
         }
 
         /* 键盘主体区域 */
@@ -168,58 +192,57 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
+            background: #0f172a;
         }
 
-        /* 八度调节按钮 */
-        .octave-btn-group {
+        /* 侧边八度按钮 */
+        .octave-controls {
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
 
-        .octave-btn {
-            width: 24px;
-            height: 24px;
-            padding: 0;
-            font-size: 16px;
-            line-height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #334155;
-        }
-
-        .octave-btn:hover {
-            background: #4f46e5;
-        }
-
         /* 琴键容器 */
         .keys-container {
             background: #000;
-            padding: 5px;
-            border-radius: 4px;
+            padding: 4px 0 0 4px; /* 上左留一点黑边 */
+            border-radius: 2px;
             display: flex;
             position: relative;
-            /* 隐藏横向滚动条但允许内容撑开 */
+            /* 关键：允许黑键溢出显示 */
             overflow: visible; 
+            /* 关键：消除 flex 间隙 */
+            font-size: 0; 
+        }
+        
+        /* 容器右边框补全 */
+        .keys-wrapper {
+            background: #000;
+            padding-right: 4px;
+            padding-bottom: 4px;
+            border-radius: 4px;
         }
 
         /* 白键 */
         .white-key {
             background: var(--white-key);
-            border: 1px solid #94a3b8;
+            /* 使用边框模拟键缝 */
+            border: 1px solid #94a3b8; 
+            border-top: none; /* 顶部不需要边框 */
             border-bottom-left-radius: 4px;
             border-bottom-right-radius: 4px;
             cursor: pointer;
             position: relative;
             z-index: 1;
-            transition: background 0.05s;
+            display: inline-block;
+            box-shadow: inset 0 -3px 5px rgba(0,0,0,0.1);
         }
 
         .white-key.active {
             background: var(--white-key-active);
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            box-shadow: inset 0 -2px 5px rgba(0,0,0,0.2);
+            transform: translateY(1px); /* 简单的按压效果 */
         }
 
         /* 键名标记 (仅C键显示) */
@@ -228,9 +251,10 @@
             bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 10px;
+            font-size: 9px;
             color: #94a3b8;
             pointer-events: none;
+            font-family: monospace;
         }
 
         /* 黑键 */
@@ -239,30 +263,42 @@
             position: absolute;
             top: 0;
             /* 核心布局要求：黑键居中于两个白键之间 */
+            /* 父级是左侧白键，left: 100% 到达右边缘，translateX(-50%) 回退一半宽度 */
             left: 100%;
             transform: translateX(-50%);
             z-index: 10;
-            border-bottom-left-radius: 2px;
-            border-bottom-right-radius: 2px;
-            box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            box-shadow: 2px 2px 3px rgba(0,0,0,0.4), inset 1px -5px 5px rgba(255,255,255,0.1);
             cursor: pointer;
-            transition: background 0.05s;
+            border: 1px solid #111;
         }
 
         .black-key.active {
             background: var(--black-key-active);
-            box-shadow: inset 0 0 5px rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
         }
-        
-        /* 提示信息 */
+
+        /* 底部信息 */
+        .window-footer {
+            background: var(--window-bg);
+            padding: 4px;
+            text-align: center;
+            font-size: 10px;
+            color: #64748b;
+            border-top: 1px solid #334155;
+        }
+
         #empty-state {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            color: #64748b;
+            color: #475569;
+            pointer-events: none;
         }
+
     </style>
 <script type="importmap">
 {
@@ -277,34 +313,39 @@
 
     <div id="toolbar">
         <h1>简易钢琴键盘</h1>
-        <div style="width: 1px; height: 20px; background: #475569;"></div>
-        <button onclick="app.createPiano()">+ 新建键盘</button>
-        <button class="secondary" onclick="app.resetDesktop()">重置桌面</button>
-        <span id="count-label" style="font-size: 12px; color: #94a3b8; margin-left: 10px;">0 个窗口</span>
+        <div style="width: 1px; height: 16px; background: #475569;"></div>
+        <button class="tool-btn" onclick="app.createPiano()">+ 新建键盘</button>
+        <button class="tool-btn secondary" onclick="app.resetDesktop()">重置桌面</button>
+        <span id="count-label" style="font-size: 12px; color: #94a3b8; margin-left: 5px; min-width: 50px;"></span>
     </div>
 
     <div id="empty-state" style="display: none;">
-        <p style="font-size: 20px; margin-bottom: 10px;">暂无键盘窗口</p>
-        <p style="font-size: 14px;">点击上方“新建键盘”开始</p>
+        <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;">🎹</div>
+        <p style="font-size: 16px;">点击上方“新建键盘”开始</p>
     </div>
 
-    <!-- 钢琴窗口将被插入到 body 中 -->
+    <!-- 钢琴窗口动态容器 -->
+    <div id="desktop-container"></div>
 
     <script>
-        // --- 音频引擎 (Audio Engine) ---
-        // 负责生成声音，处理长按延音和松手即停
+        /**
+         * 1. 音频引擎 (AudioEngine)
+         * 使用 Web Audio API 实现无延迟、无混响的声音合成。
+         */
         class AudioEngine {
             constructor() {
                 this.ctx = null;
                 this.masterGain = null;
-                this.activeOscillators = new Map(); // Map<string, {osc, gain}>
+                this.activeOscillators = new Map(); // 用于追踪按下的键，实现长按延音
             }
 
+            // 懒加载初始化，必须由用户交互触发
             init() {
                 if (!this.ctx) {
-                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
                     this.masterGain = this.ctx.createGain();
-                    this.masterGain.gain.value = 0.3; // 总音量
+                    this.masterGain.gain.value = 0.25; // 避免多键同按时爆音
                     this.masterGain.connect(this.ctx.destination);
                 }
                 if (this.ctx.state === 'suspended') {
@@ -312,18 +353,21 @@
                 }
             }
 
+            // 计算频率
             getFrequency(noteName, octave) {
                 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
                 const noteIndex = notes.indexOf(noteName);
+                // MIDI Note Calculation: (Octave + 1) * 12 + NoteIndex
                 const midiNumber = (octave + 1) * 12 + noteIndex;
                 return 440 * Math.pow(2, (midiNumber - 69) / 12);
             }
 
+            // 按下：开始发声
             startNote(id, noteName, octave) {
                 this.init();
                 const keyId = `${id}-${noteName}-${octave}`;
 
-                // 如果已经在播放，先停止（避免重音）
+                // 如果已经在响，先停掉旧的（避免相位抵消或重音）
                 if (this.activeOscillators.has(keyId)) {
                     this.stopNote(id, noteName, octave);
                 }
@@ -331,13 +375,13 @@
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
 
-                osc.type = 'triangle'; // 三角波适合模拟简单的合成器钢琴
-                osc.frequency.value = this.getFrequency(noteName, octave);
+                osc.type = 'triangle'; // 三角波音色比较接近简单的电子琴
+                osc.frequency.setValueAtTime(this.getFrequency(noteName, octave), this.ctx.currentTime);
 
-                // 包络设置
+                // 包络：瞬间起音 (Attack)
                 const now = this.ctx.currentTime;
                 gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(1, now + 0.01); // 快速起音 (10ms)
+                gain.gain.linearRampToValueAtTime(1, now + 0.01); 
 
                 osc.connect(gain);
                 gain.connect(this.masterGain);
@@ -346,6 +390,7 @@
                 this.activeOscillators.set(keyId, { osc, gain });
             }
 
+            // 松开：停止发声
             stopNote(id, noteName, octave) {
                 if (!this.ctx) return;
                 const keyId = `${id}-${noteName}-${octave}`;
@@ -355,18 +400,19 @@
                     const { osc, gain } = noteObj;
                     const now = this.ctx.currentTime;
                     
-                    // 快速释放 (50ms)，无混响，无拖尾，但避免爆音
+                    // 包络：快速释放 (Release)，无混响
                     gain.gain.cancelScheduledValues(now);
                     gain.gain.setValueAtTime(gain.gain.value, now);
-                    gain.gain.linearRampToValueAtTime(0, now + 0.05);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.05); // 50ms 消失，避免“啵”声
 
                     osc.stop(now + 0.06);
                     
-                    // 清理
+                    // 清理垃圾
                     setTimeout(() => {
                         osc.disconnect();
                         gain.disconnect();
                     }, 100);
+                    
                     this.activeOscillators.delete(keyId);
                 }
             }
@@ -374,7 +420,10 @@
 
         const audio = new AudioEngine();
 
-        // --- 钢琴窗口类 (Piano Window) ---
+        /**
+         * 2. 钢琴窗口类 (PianoWindow)
+         * 管理单个钢琴窗口的 DOM、状态和交互。
+         */
         class PianoWindow {
             constructor(id, name, x, y, zIndex) {
                 this.id = id;
@@ -383,81 +432,144 @@
                 this.y = y;
                 this.zIndex = zIndex;
                 
-                // 默认配置
+                // 状态
                 this.startOctave = 3;
                 this.endOctave = 4;
-                this.scale = 40; // 白键宽度 (px)
+                this.scale = 36; // 白键宽度 (px)
                 
-                // 创建 DOM
-                this.element = this.createDOM();
-                this.renderKeys();
+                // DOM 引用
+                this.element = null;
                 
-                // 绑定事件
-                this.bindDragEvent();
+                this.render();
             }
 
-            createDOM() {
-                const div = document.createElement('div');
-                div.className = 'piano-window';
-                div.id = this.id;
-                div.style.left = this.x + 'px';
-                div.style.top = this.y + 'px';
-                div.style.zIndex = this.zIndex;
+            render() {
+                // 创建容器
+                this.element = document.createElement('div');
+                this.element.className = 'piano-window';
+                this.element.id = this.id;
+                this.updateStyle(); // 设置初始位置和层级
 
-                // 内部结构
-                div.innerHTML = `
+                // 填充 HTML 结构
+                this.element.innerHTML = `
                     <div class="window-header">
                         <div class="window-title">🎹 ${this.name}</div>
                         <div class="window-controls">
-                            <div class="scale-control" onmousedown="event.stopPropagation()">
-                                <span>大小</span>
-                                <input type="range" min="20" max="60" value="${this.scale}" class="scale-slider">
+                            <!-- 缩放控制：改为按钮 -->
+                            <div class="control-group" onmousedown="event.stopPropagation()">
+                                <span class="control-label">大小</span>
+                                <button class="icon-btn scale-decrease" title="缩小">-</button>
+                                <button class="icon-btn scale-increase" title="放大">+</button>
                             </div>
                             <button class="close-btn" title="关闭">✕</button>
                         </div>
                     </div>
                     <div class="keyboard-body">
-                        <div class="octave-btn-group">
-                            <button class="octave-btn add-low" title="添加低八度">+</button>
-                            <button class="octave-btn remove-low" title="移除低八度">-</button>
+                        <div class="octave-controls">
+                            <button class="icon-btn add-low" title="添加低八度">+</button>
+                            <button class="icon-btn remove-low" title="移除低八度">-</button>
                         </div>
-                        <div class="keys-container">
-                            <!-- 琴键将在此处生成 -->
+                        
+                        <div class="keys-wrapper">
+                            <div class="keys-container">
+                                <!-- 键位将通过 JS 插入 -->
+                            </div>
                         </div>
-                        <div class="octave-btn-group">
-                            <button class="octave-btn add-high" title="添加高八度">+</button>
-                            <button class="octave-btn remove-high" title="移除高八度">-</button>
+
+                        <div class="octave-controls">
+                            <button class="icon-btn add-high" title="添加高八度">+</button>
+                            <button class="icon-btn remove-high" title="移除高八度">-</button>
                         </div>
                     </div>
-                    <div style="text-align: center; font-size: 10px; color: #64748b; padding-bottom: 5px;">
-                        音域: <span class="range-label">${this.startOctave} - ${this.endOctave}</span> 八度
+                    <div class="window-footer">
+                        音域范围: <span class="range-display">C${this.startOctave} - B${this.endOctave}</span>
                     </div>
                 `;
 
-                // 绑定按钮事件
-                div.querySelector('.close-btn').onclick = (e) => {
+                // 绑定所有事件
+                this.bindEvents();
+                
+                // 初次渲染琴键
+                this.renderKeys();
+
+                // 挂载到页面
+                document.getElementById('desktop-container').appendChild(this.element);
+            }
+
+            updateStyle() {
+                if (this.element) {
+                    this.element.style.left = this.x + 'px';
+                    this.element.style.top = this.y + 'px';
+                    this.element.style.zIndex = this.zIndex;
+                }
+            }
+
+            bindEvents() {
+                const el = this.element;
+
+                // 1. 关闭按钮
+                el.querySelector('.close-btn').onclick = (e) => {
                     e.stopPropagation();
                     app.removePiano(this.id);
                 };
-                
-                div.querySelector('.scale-slider').oninput = (e) => {
-                    this.scale = parseInt(e.target.value);
-                    this.renderKeys();
+
+                // 2. 缩放按钮
+                el.querySelector('.scale-decrease').onclick = () => this.changeScale(-4);
+                el.querySelector('.scale-increase').onclick = () => this.changeScale(4);
+
+                // 3. 八度按钮
+                el.querySelector('.add-low').onclick = () => this.changeOctave(-1, 'start');
+                el.querySelector('.remove-low').onclick = () => this.changeOctave(1, 'start');
+                el.querySelector('.add-high').onclick = () => this.changeOctave(1, 'end');
+                el.querySelector('.remove-high').onclick = () => this.changeOctave(-1, 'end');
+
+                // 4. 点击窗口置顶
+                el.onmousedown = () => app.bringToFront(this.id);
+
+                // 5. 拖拽逻辑
+                const header = el.querySelector('.window-header');
+                header.onmousedown = (e) => {
+                    // 如果点在按钮上，不触发拖拽
+                    if (e.target.tagName === 'BUTTON') return;
+                    
+                    e.preventDefault();
+                    app.bringToFront(this.id);
+                    
+                    const startX = e.clientX;
+                    const startY = e.clientY;
+                    const initialLeft = this.x;
+                    const initialTop = this.y;
+                    
+                    header.classList.add('dragging');
+
+                    const onMove = (moveEvent) => {
+                        const dx = moveEvent.clientX - startX;
+                        const dy = moveEvent.clientY - startY;
+                        this.x = initialLeft + dx;
+                        this.y = initialTop + dy;
+                        this.updateStyle();
+                    };
+
+                    const onUp = () => {
+                        header.classList.remove('dragging');
+                        document.removeEventListener('mousemove', onMove);
+                        document.removeEventListener('mouseup', onUp);
+                    };
+
+                    document.addEventListener('mousemove', onMove);
+                    document.addEventListener('mouseup', onUp);
                 };
-
-                div.querySelector('.add-low').onclick = () => this.updateOctave(-1, 'start');
-                div.querySelector('.remove-low').onclick = () => this.updateOctave(1, 'start');
-                div.querySelector('.add-high').onclick = () => this.updateOctave(1, 'end');
-                div.querySelector('.remove-high').onclick = () => this.updateOctave(-1, 'end');
-                
-                // 点击窗口置顶
-                div.onmousedown = () => app.bringToFront(this.id);
-
-                document.body.appendChild(div);
-                return div;
             }
 
-            updateOctave(delta, type) {
+            changeScale(delta) {
+                let newScale = this.scale + delta;
+                if (newScale < 20) newScale = 20; // 最小宽度
+                if (newScale > 80) newScale = 80; // 最大宽度
+                this.scale = newScale;
+                this.renderKeys();
+            }
+
+            changeOctave(delta, type) {
                 if (type === 'start') {
                     const newVal = this.startOctave + delta;
                     if (newVal < 0 || newVal >= this.endOctave) return;
@@ -467,20 +579,22 @@
                     if (newVal > 8 || newVal <= this.startOctave) return;
                     this.endOctave = newVal;
                 }
-                this.updateRangeLabel();
+                this.element.querySelector('.range-display').textContent = `C${this.startOctave} - B${this.endOctave}`;
                 this.renderKeys();
             }
 
-            updateRangeLabel() {
-                this.element.querySelector('.range-label').textContent = `${this.startOctave} - ${this.endOctave}`;
-            }
-
-            // 核心渲染逻辑：生成白键和黑键
+            // 核心功能：渲染琴键 HTML
             renderKeys() {
                 const container = this.element.querySelector('.keys-container');
-                container.innerHTML = ''; // 清空
+                container.innerHTML = '';
 
-                const notesConfig = [
+                // 尺寸计算
+                const wKeyW = this.scale;
+                const wKeyH = this.scale * 4.5;
+                const bKeyW = wKeyW * 0.6; // 黑键宽度是白键的 60%
+                const bKeyH = wKeyH * 0.65;
+
+                const notes = [
                     { name: 'C', hasSharp: true },
                     { name: 'D', hasSharp: true },
                     { name: 'E', hasSharp: false },
@@ -490,20 +604,15 @@
                     { name: 'B', hasSharp: false },
                 ];
 
-                const whiteKeyWidth = this.scale;
-                const whiteKeyHeight = this.scale * 4.5;
-                const blackKeyWidth = whiteKeyWidth * 0.6;
-                const blackKeyHeight = whiteKeyHeight * 0.6;
-
                 for (let o = this.startOctave; o <= this.endOctave; o++) {
-                    notesConfig.forEach(note => {
+                    notes.forEach(note => {
                         // 1. 创建白键
                         const whiteKey = document.createElement('div');
                         whiteKey.className = 'white-key';
-                        whiteKey.style.width = whiteKeyWidth + 'px';
-                        whiteKey.style.height = whiteKeyHeight + 'px';
+                        whiteKey.style.width = wKeyW + 'px';
+                        whiteKey.style.height = wKeyH + 'px';
                         
-                        // C 键标记
+                        // C 键加标签
                         if (note.name === 'C') {
                             const label = document.createElement('span');
                             label.className = 'key-label';
@@ -511,19 +620,20 @@
                             whiteKey.appendChild(label);
                         }
 
-                        // 绑定白键交互
-                        this.bindKeyEvents(whiteKey, note.name, o, false);
-                        
-                        // 2. 如果有黑键 (Sharp)，将其作为子元素挂载到白键上，利用 absolute 定位实现 "居中于两键之间"
+                        // 绑定事件
+                        this.bindKeyInteractions(whiteKey, note.name, o, false);
+
+                        // 2. 如果有黑键，将其作为子元素放在白键里
                         if (note.hasSharp) {
                             const blackKey = document.createElement('div');
                             blackKey.className = 'black-key';
-                            blackKey.style.width = blackKeyWidth + 'px';
-                            blackKey.style.height = blackKeyHeight + 'px';
-                            // CSS 中已经定义了 left: 100%; transform: translateX(-50%)
+                            blackKey.style.width = bKeyW + 'px';
+                            blackKey.style.height = bKeyH + 'px';
                             
-                            // 绑定黑键交互
-                            this.bindKeyEvents(blackKey, note.name + '#', o, true);
+                            // 布局关键点：黑键是左侧白键的子元素，left: 100% 使其位于右边缘，translate -50% 使其中心对齐右边缘
+                            // 从而正好位于两个白键中间
+                            
+                            this.bindKeyInteractions(blackKey, note.name + '#', o, true);
                             whiteKey.appendChild(blackKey);
                         }
 
@@ -532,107 +642,65 @@
                 }
             }
 
-            bindKeyEvents(element, noteName, octave, isBlack) {
+            // 统一处理鼠标和触摸事件
+            bindKeyInteractions(dom, noteName, octave, isBlack) {
                 const start = (e) => {
-                    e.stopPropagation(); // 防止触发父元素事件
-                    e.preventDefault();  // 防止触摸屏滚动
-                    element.classList.add('active');
-                    audio.startNote(this.id, noteName, octave);
+                    // 阻止默认事件（防止移动端滚动，防止黑键点击穿透）
+                    e.preventDefault(); 
+                    e.stopPropagation();
+
+                    if (!dom.classList.contains('active')) {
+                        dom.classList.add('active');
+                        audio.startNote(this.id, noteName, octave);
+                    }
                 };
 
                 const stop = (e) => {
-                    // 仅当包含 active 类时才执行停止逻辑，避免多次触发
-                    if (element.classList.contains('active')) {
-                        element.classList.remove('active');
+                    e.preventDefault();
+                    if (dom.classList.contains('active')) {
+                        dom.classList.remove('active');
                         audio.stopNote(this.id, noteName, octave);
                     }
                 };
 
-                // 鼠标事件
-                element.onmousedown = start;
-                element.onmouseup = stop;
-                element.onmouseleave = stop;
+                // 鼠标
+                dom.addEventListener('mousedown', start);
+                dom.addEventListener('mouseup', stop);
+                dom.addEventListener('mouseleave', stop);
 
-                // 触摸事件 (支持多点触控)
-                element.ontouchstart = start;
-                element.ontouchend = stop;
-                element.ontouchcancel = stop;
-            }
-
-            // 丝滑拖拽实现 (直接操作 DOM 样式，不经过框架状态)
-            bindDragEvent() {
-                const header = this.element.querySelector('.window-header');
-                let isDragging = false;
-                let startX = 0;
-                let startY = 0;
-                let initialLeft = 0;
-                let initialTop = 0;
-
-                const onMouseMove = (e) => {
-                    if (!isDragging) return;
-                    const dx = e.clientX - startX;
-                    const dy = e.clientY - startY;
-                    
-                    this.x = initialLeft + dx;
-                    this.y = initialTop + dy;
-                    
-                    this.element.style.left = this.x + 'px';
-                    this.element.style.top = this.y + 'px';
-                };
-
-                const onMouseUp = () => {
-                    if (isDragging) {
-                        isDragging = false;
-                        header.classList.remove('dragging');
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                    }
-                };
-
-                header.onmousedown = (e) => {
-                    // 如果点击的是控制按钮，不触发拖拽
-                    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
-                    
-                    isDragging = true;
-                    header.classList.add('dragging');
-                    startX = e.clientX;
-                    startY = e.clientY;
-                    initialLeft = this.x;
-                    initialTop = this.y;
-                    
-                    // 置顶
-                    app.bringToFront(this.id);
-
-                    document.addEventListener('mousemove', onMouseMove);
-                    document.addEventListener('mouseup', onMouseUp);
-                };
+                // 触摸
+                dom.addEventListener('touchstart', start, { passive: false });
+                dom.addEventListener('touchend', stop);
+                dom.addEventListener('touchcancel', stop);
             }
         }
 
-        // --- 应用程序管理器 (Main App) ---
+        /**
+         * 3. 应用管理器 (App)
+         * 全局状态管理
+         */
         class App {
             constructor() {
-                this.pianos = new Map(); // id -> PianoWindow
+                this.pianos = new Map();
+                this.nextId = 1;
                 this.maxZIndex = 100;
-                this.nextPianoIndex = 1;
-                this.countLabel = document.getElementById('count-label');
-                this.emptyState = document.getElementById('empty-state');
+                this.labelEl = document.getElementById('count-label');
+                this.emptyEl = document.getElementById('empty-state');
             }
 
             init() {
-                // 初始化创建一个
                 this.createPiano();
             }
 
             createPiano() {
-                const id = 'piano-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
-                const name = `钢琴${this.nextPianoIndex++}`;
+                const id = 'piano-' + Date.now() + Math.random();
+                const name = `钢琴${this.nextId++}`;
                 
-                // 简单的级联位置计算
-                const offset = (this.pianos.size * 30) % 200;
+                // 简单的瀑布流位置计算
+                const offset = (this.pianos.size % 10) * 30;
                 const x = 50 + offset;
-                const y = 100 + offset;
-                
+                const y = 80 + offset;
+
                 const piano = new PianoWindow(id, name, x, y, ++this.maxZIndex);
                 this.pianos.set(id, piano);
                 this.updateUI();
@@ -641,22 +709,22 @@
             removePiano(id) {
                 const piano = this.pianos.get(id);
                 if (piano) {
-                    piano.element.remove();
-                    this.pianos.delete(id);
+                    piano.element.remove(); // DOM 移除
+                    this.pianos.delete(id); // 内存移除
                     this.updateUI();
                 }
             }
 
             resetDesktop() {
-                // 清除所有
+                // 清空当前
                 this.pianos.forEach(p => p.element.remove());
                 this.pianos.clear();
                 
                 // 重置计数
+                this.nextId = 1;
                 this.maxZIndex = 100;
-                this.nextPianoIndex = 1;
-                
-                // 创建默认
+
+                // 新建一个
                 this.createPiano();
             }
 
@@ -670,16 +738,11 @@
 
             updateUI() {
                 const count = this.pianos.size;
-                this.countLabel.textContent = `${count} 个窗口`;
-                if (count === 0) {
-                    this.emptyState.style.display = 'block';
-                } else {
-                    this.emptyState.style.display = 'none';
-                }
+                this.labelEl.textContent = `${count} 个窗口`;
+                this.emptyEl.style.display = count === 0 ? 'block' : 'none';
             }
         }
 
-        // 启动应用
         const app = new App();
         app.init();
 
