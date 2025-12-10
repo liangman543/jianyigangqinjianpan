@@ -1,0 +1,5 @@
+{
+  "name": "简易钢琴键盘",
+  "description": "一个支持多窗口、自由拖拽、动态音域调节的纯前端简易钢琴应用。",
+  "requestFramePermissions": []
+}
